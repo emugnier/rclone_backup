@@ -1,0 +1,17 @@
+# Hidden files
+.*
+.*/**
+
+
+# s2e
+ac_sym/s2e/source/
+ac_sym/s2e/build/
+ac_sym/s2e/images/
+ac_sym/s2e/install/
+ac_sym/s2e-env/
+
+# postgresql
+ac_sym/postgresql/
+
+# snap
+snap/

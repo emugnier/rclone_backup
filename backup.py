@@ -54,12 +54,12 @@ def execute_command(command):
         logging.error(line_stderr)
 
 
-def sync(remote, path):
+def sync(remote, path, exclude_file):
     now = datetime.now()
     dt_string = now.strftime("%d_%m_%Y_%H_%M_%S")
 
-    command = "rclone sync -P {path} {remote}:backup --backup-dir={remote}:archive/{dt_string}".format(
-        remote=remote, dt_string=dt_string, path=path
+    command = "rclone sync --exclude-from {exclude_file} -P {path} {remote}:backup --backup-dir={remote}:archive/{dt_string}".format(
+        remote=remote, dt_string=dt_string, path=path, exclude_file=exclude_file
     )
     execute_command(command)
 
@@ -82,6 +82,7 @@ if __name__ == "__main__":
     parser_sync = subparsers.add_parser("sync")
     parser_sync.add_argument("remote", type=str, help="remote")
     parser_sync.add_argument("path", type=str, help="path to the content to backup")
+    parser_sync.add_argument("exclude_file", type=str, help="path to the content to backup")
     parser_mount = subparsers.add_parser("mount")
     parser_mount.add_argument("remote", type=str, help="remote")
     parser_mount.add_argument("path", type=str, help="mount location")
@@ -90,7 +91,7 @@ if __name__ == "__main__":
     setup_logging("log.info", 0)
 
     if args.command == "sync":
-        sync(args.remote, args.path)
+        sync(args.remote, args.path, args.exclude_file)
 
     if args.command == "mount":
         mount(args.remote, args.path)
